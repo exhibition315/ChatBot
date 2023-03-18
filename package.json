@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,6 +19,7 @@
   "homepage": "https://github.com/exhibition315/ChatBot#readme",
   "dependencies": {
     "@line/bot-sdk": "^7.5.2",
+    "@vercel/node": "^2.9.13",
     "dotenv": "^16.0.3",
     "express": "^4.18.2"
   }
