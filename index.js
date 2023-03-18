@@ -1,7 +1,9 @@
-const line = require("@line/bot-sdk");
-const express = require("express");
+import { ChatGPTUnofficialProxyAPI } from 'chatgpt';
+import line from '@line/bot-sdk';
+import express from 'express';
+import * as dotenv from 'dotenv';
 
-require("dotenv").config();
+dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 const config = {
@@ -12,11 +14,17 @@ const config = {
 const client = new line.Client(config);
 const app = express();
 
-const handleEvent = (event) => {
+const api = new ChatGPTUnofficialProxyAPI({
+  accessToken: process.env.OPEN_AI_TOKEN,
+});
+
+const handleEvent = async (event) => {
   if (event.type !== "message" || event.message.type !== "text") {
     return Promise.resolve(null);
   }
-  const echo = { type: "text", text: event.message.text };
+
+  const res = await api.sendMessage(event.message.text)
+  const echo = { type: "text", text: res.text };
   return client.replyMessage(event.replyToken, echo);
 };
 
@@ -30,7 +38,7 @@ app.post("/callback", line.middleware(config), (req, res) => {
 });
 
 app.get('/hello', (req, res) => {
-  res.send('Hello World!')
+  res.send('Hello')
 })
 
 app.listen(PORT, () => {
